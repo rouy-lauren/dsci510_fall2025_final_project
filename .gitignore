@@ -1,0 +1,15 @@
+# Ignore environment and API credentials
+.env
+
+# Keep example visible in repo
+!.env.example
+
+# Ignore data and results folders
+data/
+results/
+
+# Ignore Python cache files
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
+.DS_Store
