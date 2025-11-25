@@ -29,5 +29,10 @@ YELP_REVIEWS = f"{YELP_HOST}/v3/businesses/{{id}}/reviews"
 DEFAULT_TERM = "restaurants"
 DEFAULT_LOCATION = "Los Angeles, CA"
 DEFAULT_LIMIT = 50   # per page (max 50)
-DEFAULT_PAGES = 10   # 10*50 = 500 results
+DEFAULT_PAGES = 20   # 20*50 = 1000 results
 
+# LA Almanac demographics table
+LA_RACE_URL = "https://www.laalmanac.com/population/po38.php"
+
+# LA cities and ZIP codes table
+ZIPCODE_LA_URL = "https://www.zipcode.com.ng/2022/06/los-angeles-zip-codes.html"

@@ -1,10 +1,7 @@
 import argparse
-from config import (
-    DEFAULT_TERM, DEFAULT_LOCATION, DEFAULT_LIMIT, DEFAULT_PAGES,RESULTS_DIR,
-)
+from config import (DEFAULT_TERM, DEFAULT_LOCATION, DEFAULT_LIMIT, DEFAULT_PAGES,RESULTS_DIR,)
 from load import fetch_and_cache
-from process import flatten_businesses
-from analyze import analyze_yelp_data
+from process import fetch_la_almanac_race_table, la_cities_zipcode, fetch_restaurants_by_zip
 
 def _tag(term: str, location: str) -> str:
     return f"{term}_{location}".replace(" ", "_").replace(",", "").replace("/", "_")
@@ -25,14 +22,22 @@ def main():
     raw_path = fetch_and_cache(args.term, args.location, args.limit, args.pages)
     print(f"Saved raw JSON → {raw_path}")
 
-    csv_path = flatten_businesses(raw_path)
-    print(f"Saved processed CSV → {csv_path}")
+    df_demo = fetch_la_almanac_race_table()
+    print("✓ LA Almanac race table fetched and processed")
+    print(df_demo.head())
+    print()
 
-    print("Running analysis on processed Yelp data ...")
-    analyze_yelp_data(str(csv_path), dataset_name=tag)
-    print(f"Done. See results in: {RESULTS_DIR}")
+    df_zipcode = la_cities_zipcode()
+    print("✓ ZIPCode.com.ng LA cities table fetched and processed")
+    print(df_zipcode.head())
+    print()
 
+    df_rest = fetch_restaurants_by_zip(term=args.term)
+    print("✓ Yelp restaurants by ZIP fetched and processed")
+    print(df_rest.head())
+    print()
 
 
 if __name__ == "__main__":
     main()
+

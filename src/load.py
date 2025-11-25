@@ -10,22 +10,22 @@ def _headers() -> Dict[str, str]:
         raise RuntimeError("Missing YELP_API_KEY in environment (.env).")
     return {"Authorization": f"Bearer {YELP_API_KEY}"}
 
-def yelp_search(term: str, location: str, limit: int = 50, pages: int = 1, pause: float = 0.25) -> List[Dict]:
+def yelp_search(term: str, location: str,limit: int = 50, pages: int = 4, pause: float = 0.25) -> List[Dict]:
     """
     Paginated Yelp search. Returns list of business dicts.
     """
     out: List[Dict] = []
     limit = min(int(limit), 50)          # never exceed 50 per request
-    MAX_OFFSET = 1000                    # Yelp won't allow >= 1000
+    MAX_OFFSET = 200                   # Yelp won't allow >= 200
 
     for page in range(pages):
         offset = page * limit
         # stop before we exceed Yelp's offset window
-        if offset >= MAX_OFFSET:
+        if offset > MAX_OFFSET:
             print("⚠️ Reached Yelp offset limit (1000). Stopping early.")
             break
 
-        params = {"term": term, "location": location, "limit": limit,"offset": offset}
+        params = {"term": term, "location": location, "limit": limit,"offset": offset, "categories": "restaurants", "sort_by": "best_match"}
 
         try:
             r = requests.get(YELP_SEARCH, headers=_headers(), params=params, timeout=20)
